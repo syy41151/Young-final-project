@@ -31,5 +31,3 @@
 #  The following omitted 300 words
   
 #  Anyway, please let me pass this lesson
- 
- 
