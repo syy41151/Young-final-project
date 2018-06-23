@@ -11,6 +11,6 @@
   # User can also receive the warning mail with message and picture. If his cellphone and raspberry pi are both in the same domain,and he  can see the picture one his own device,too.
 # Step 4:
  # Finally, If you want to watch the video , and you can download the project.mp4 or going to this URL under the line.
- #https://drive.google.com/open?id=0B8UcBeqVGlKCTDdIVzFXMUpSTGs
+ https://drive.google.com/open?id=0B8UcBeqVGlKCTDdIVzFXMUpSTGs
  
  
