@@ -1,0 +1,60 @@
+import RPi.GPIO as GPIO
+import time
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
+import os
+import sys
+from datetime import datetime
+
+user = "a0988330147@gmail.com"
+pwd = "happy85924"
+to = "a0988330147@gmail.com"
+
+msg = MIMEMultipart()
+msg["Subject"] = "Warning"
+msg["From"] = user
+msg["To"] = to
+
+part = MIMEText("There are some people in your house")
+msg.attach(part)
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(11, GPIO.IN)         #Read output from PIR motion sensor
+GPIO.setup(3, GPIO.OUT)         #LED output pin
+GPIO.setup(37, GPIO.OUT)
+p = GPIO.PWM(37,50)
+p.start(1)
+try:
+    while True:
+        i=GPIO.input(11)
+        if i==0:                 #When output from motion sensor is LOW
+            GPIO.output(3, 0)  #Turn OFF LED
+            p.ChangeFrequency(1)
+            p.stop()
+            time.sleep(0.1)
+        elif i==1:               #When output from motion sensor is HIGH
+            GPIO.output(3, 1)  #Turn ON LED
+            p.start(1)
+            p.ChangeFrequency(659)
+            os.system('raspistill -o testphoto/photo.jpg -t 100 -q 5')
+            str = 'testphoto/'+time.strftime("%Y_%m_%d-%H_%M_%S", time.localtime())+'.jpg'
+            att1 = MIMEApplication(open("testphoto/photo.jpg",'rb').read())
+            att1.add_header('Content-Disposition','attachment',filename="test.jpg")
+            msg.attach(att1)
+            smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
+            smtpObj.starttls()
+            smtpObj.login('a0988330147@gmail.com','happy85924')
+            smtpObj.sendmail(user,to,msg.as_string())
+            smtpObj.close
+            os.rename("testphoto/photo.jpg",str)
+            time.sleep(5.0)
+except KeyboardInterrupt:
+    GPIO.output(3,False)
+    GPIO.cleanup()
+    sys.exit()
+finally:
+    GPIO.cleanup()
+
