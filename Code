@@ -8,9 +8,9 @@ import os
 import sys
 from datetime import datetime
 
-user = "a0988330147@gmail.com"
-pwd = "happy85924"
-to = "a0988330147@gmail.com"
+user = "sender_email"
+pwd = "sender_passwd"
+to = "receiver_email"
 
 msg = MIMEMultipart()
 msg["Subject"] = "Warning"
@@ -46,7 +46,7 @@ try:
             msg.attach(att1)
             smtpObj = smtplib.SMTP('smtp.gmail.com', 587)
             smtpObj.starttls()
-            smtpObj.login('a0988330147@gmail.com','happy85924')
+            smtpObj.login('sender_email','sender_passwd')
             smtpObj.sendmail(user,to,msg.as_string())
             smtpObj.close
             os.rename("testphoto/photo.jpg",str)
